@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Login | ERMS{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h1>{{ role|capfirst }} Portal</h1>
+        <p class="subtext">Enter your credentials to access the {{ role }} dashboard.</p>
+        {% if form.errors %}
+        <div class="alert alert-error">Invalid credentials, please try again.</div>
+        {% endif %}
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <label for="id_username">Username</label>
+            {{ form.username }}
+            <label for="id_password">Password</label>
+            {{ form.password }}
+            <button type="submit">Login</button>
+        </form>
+        <div class="switch-links">
+            {% if role == 'admin' %}
+            <p>Looking for the employee portal? <a href="{% url 'employee_login' %}">Employee login</a></p>
+            {% else %}
+            <p>Need admin access? <a href="{% url 'admin_login' %}">Go to admin login</a></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

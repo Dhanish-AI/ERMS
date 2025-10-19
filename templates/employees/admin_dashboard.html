@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard | ERMS{% endblock %}
+{% block content %}
+<section class="dashboard">
+    <div class="card">
+        <div class="card-header">
+            <h2>Overview</h2>
+            <div class="actions">
+                <a class="btn" href="{% url 'employee_create' %}">Add Employee</a>
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat">
+                <span class="label">Total Employees</span>
+                <span class="value">{{ employees_count }}</span>
+            </div>
+            <div class="stat">
+                <span class="label">Full-Time</span>
+                <span class="value">{{ full_time_count }}</span>
+            </div>
+            <div class="stat">
+                <span class="label">Departments</span>
+                <span class="value">{{ department_count }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Employees</h2>
+            <form class="actions" method="get" action="{% url 'admin_dashboard' %}">
+                <input type="search" name="q" placeholder="Search employees" aria-label="Search employees" value="{{ query }}">
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Hire Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.employee_id }}</td>
+                        <td>{{ employee.full_name }}</td>
+                        <td>{{ employee.role }}</td>
+                        <td>{{ employee.department }}</td>
+                        <td><span class="badge">{{ employee.status }}</span></td>
+                        <td>{{ employee.hire_date|date:'M d, Y' }}</td>
+                        <td class="row-actions">
+                            <a href="{% url 'employee_detail' employee.pk %}">View</a>
+                            <a href="{% url 'employee_update' employee.pk %}">Edit</a>
+                            <a href="{% url 'employee_delete' employee.pk %}" class="danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No employees found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
